@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+const API_BASE = window.location.hostname === 'localhost' ? '' : 'https://setuai-backend.onrender.com';
 
 const sample = "I'm a final-year B.Tech student from an EWS family in Andhra Pradesh. Our annual household income is ₹2.2 lakh.";
 const steps = ['Tell us about you', 'Discover benefits', 'Review your draft', 'Track application'];
@@ -29,7 +30,7 @@ function Intake({ intake, setIntake, onComplete }) {
     try { 
       const selectedState = new FormData(e.currentTarget).get('selectedState');
       const intakeWithState = selectedState ? `${intake}\nState / UT selected: ${selectedState}` : intake;
-      const response = await fetch('/api/analyze-intake', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ intake: intakeWithState, selectedState }) }); 
+      const response = await fetch(`${API_BASE}/api/analyze-intake`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ intake: intakeWithState, selectedState }) }); 
       const responseText = await response.text();
       const data = responseText ? JSON.parse(responseText) : {};
       if (!response.ok) throw new Error(data.error || 'Unable to analyse your details.'); 
